@@ -65,9 +65,6 @@ cd project-prometheus
 # Install dependencies (monorepo)
 npm install
 
-# Run both Front-end `Next.js` & Back-end `Nest.js`
+# Run both Front-end `Next.js` & Back-end `Nest.js` by the power of `Monorepo`
 npm run dev
 
-
-# Start the apps
-npm run dev
