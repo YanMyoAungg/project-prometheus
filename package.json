@@ -1,0 +1,11 @@
+{
+  "name": "notfacebook",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"], 
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace=@notfacebook/web\" \"npm run start:dev --workspace=@notfacebook/api\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

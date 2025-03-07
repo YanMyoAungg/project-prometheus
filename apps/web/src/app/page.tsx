@@ -1,0 +1,10 @@
+"use client";
+
+export default function Home() {
+  return (
+    <>
+      <div>Hello Word!</div>
+      <div>Testing</div>
+    </>
+  );
+}

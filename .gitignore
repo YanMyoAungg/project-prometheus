@@ -1,0 +1,14 @@
+# Ignore node_modules everywhere
+node_modules/
+apps/*/node_modules/
+packages/*/node_modules/
+
+# Build files (keep source code)
+apps/*/.next/
+apps/*/dist/
+.next/
+dist/
+
+# Environment files
+.env
+.env.local
