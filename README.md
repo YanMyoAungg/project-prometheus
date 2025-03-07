@@ -8,7 +8,7 @@ A social platform focused on **quality content** and meaningful interactions, bu
 
 ## 📖 Overview
 
-NotFacebook is an open-source social media platform designed to foster genuine connections through high-quality content. Unlike traditional platforms, we emphasize **user control**, **transparent content moderation**, and **community-driven curation**.
+Project-Prometheus is an open-source social media platform designed to foster genuine connections through high-quality content. Unlike traditional platforms, we emphasize **user control**, **transparent content moderation**, and **community-driven curation**.
 
 ### Goals
 - 🎯 **Quality Over Quantity**: Prioritize meaningful posts over viral clickbait.
@@ -59,11 +59,15 @@ NotFacebook is an open-source social media platform designed to foster genuine c
 
 ```bash
 # Clone the repo
-git clone https://github.com/YanMyoAungg/NotFacebook.git
-cd NotFacebook
+git clone https://github.com/YanMyoAungg/project-prometheus.git
+cd project-prometheus
 
 # Install dependencies (monorepo)
 npm install
+
+# Run both Front-end `Next.js` & Back-end `Nest.js`
+npm run dev
+
 
 # Start the apps
 npm run dev
