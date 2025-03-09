@@ -1,9 +1,12 @@
 {
-  "name": "notfacebook",
+  "name": "prometheus",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"], 
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace=@notfacebook/web\" \"npm run start:dev --workspace=@notfacebook/api\""
+    "dev": "concurrently \"npm run dev --workspace=@prometheus/web\" \"npm run start:dev --workspace=@prometheus/api\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
