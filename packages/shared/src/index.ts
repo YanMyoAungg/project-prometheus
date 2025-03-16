@@ -1,2 +1,2 @@
 // packages/shared/src/index.ts
-export * from "./types/code";
+export type { User, Comment, Post } from "./types/core";
