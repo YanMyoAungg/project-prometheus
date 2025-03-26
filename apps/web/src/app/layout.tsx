@@ -1,17 +1,9 @@
-import type { Metadata } from "next";
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "@/components/Provider";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import TopNav from "@/components/topNav";
+import BottomNav from "@/components/bottomNav";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Prometheus",
@@ -22,6 +14,17 @@ export const metadata: Metadata = {
     maximumScale: 1,
   },
 };
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+export const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,7 +33,12 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body>
-        <Provider>{children}</Provider>
+        <Provider>
+          <TopNav />
+
+          {children}
+          <BottomNav />
+        </Provider>
       </body>
     </html>
   );
