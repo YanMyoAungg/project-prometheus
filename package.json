@@ -6,7 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace=@prometheus/web\" \"npm run start:dev --workspace=@prometheus/api\""
+    "build": "npm run build -ws",
+    "dev": "npm run start:dev -w @prometheus/api & npm run dev -w @prometheus/web",
+    "prepare": "npm run build -w @prometheus/shared",
+    "typecheck": "tsc --noEmit -ws"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

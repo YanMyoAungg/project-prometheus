@@ -1,1 +1,2 @@
-export const validateUsername = (name: string) => name.length >= 3;
+// packages/shared/src/index.ts
+export type { User, Comment, Post } from "./types/core";
