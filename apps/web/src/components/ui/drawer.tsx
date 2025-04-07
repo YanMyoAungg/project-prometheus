@@ -1,4 +1,9 @@
-import { Drawer as ChakraDrawer, Portal } from "@chakra-ui/react";
+import {
+  Drawer as ChakraDrawer,
+  ClientOnly,
+  Portal,
+  Skeleton,
+} from "@chakra-ui/react";
 import { CloseButton } from "./close-button";
 import * as React from "react";
 

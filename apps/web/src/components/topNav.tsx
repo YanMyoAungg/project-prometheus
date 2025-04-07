@@ -1,7 +1,14 @@
 // components/TopNav.tsx
 "use client";
 
-import { Box, Flex, IconButton, Separator } from "@chakra-ui/react";
+import {
+  Box,
+  ClientOnly,
+  Flex,
+  IconButton,
+  Separator,
+  Skeleton,
+} from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
 import { ColorModeButton } from "./ui/color-mode";
 
@@ -22,9 +29,11 @@ const TopNav = () => {
           <PrimaryDrawer />
           <Flex>
             <ColorModeButton />
-            <IconButton variant="ghost" aria-label="Search">
-              <FiSearch />
-            </IconButton>
+            <ClientOnly fallback={<Skeleton boxSize="8" />}>
+              <IconButton variant="ghost" aria-label="Search">
+                <FiSearch />
+              </IconButton>
+            </ClientOnly>
           </Flex>
         </Flex>
         <Separator />

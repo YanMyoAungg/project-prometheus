@@ -1,4 +1,4 @@
-import { ClientOnly, IconButton } from "@chakra-ui/react";
+import { ClientOnly, IconButton, Skeleton } from "@chakra-ui/react";
 import {
   DrawerContent,
   DrawerRoot,
@@ -10,11 +10,10 @@ import {
   DrawerTitle,
 } from "./ui/drawer";
 import { FiMenu } from "react-icons/fi";
-import { CloseButton } from "./ui/close-button";
 const PrimaryDrawer = () => {
   return (
-    <ClientOnly>
-      <DrawerRoot size={"xs"} placement={"end"}>
+    <ClientOnly fallback={<Skeleton boxSize="8" />}>
+      <DrawerRoot size={"xs"} placement={"start"}>
         <DrawerTrigger asChild>
           <IconButton variant="ghost" aria-label="Drawer">
             <FiMenu />
@@ -32,9 +31,6 @@ const PrimaryDrawer = () => {
             </p>
           </DrawerBody>
           <DrawerFooter></DrawerFooter>
-          <DrawerCloseTrigger asChild>
-            <CloseButton size="sm" />
-          </DrawerCloseTrigger>
         </DrawerContent>
       </DrawerRoot>
     </ClientOnly>
