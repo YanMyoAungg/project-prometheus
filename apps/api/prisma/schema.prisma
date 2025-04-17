@@ -29,16 +29,23 @@ enum Status {
   flagged
 }
 
-model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
 
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  role      Role       @default(USER)
   posts     Post[]
   comments  Comment[]
   reactions Reaction[]
+  password  String     @default("")
 }
 
 model Post {
@@ -78,7 +85,7 @@ model Comment {
   author    User       @relation(fields: [authorId], references: [id])
   reactions Reaction[]
 
-  // Self-relations for nested replies:
+  // Self-relations for nested replies: One to Many
   parentId String?
   parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies  Comment[] @relation("CommentReplies")

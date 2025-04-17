@@ -4,6 +4,9 @@ CREATE TYPE "ReactionEnum" AS ENUM ('like', 'dislike', 'love', 'funny', 'inspiri
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('published', 'deleted', 'flagged');
 
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'MODERATOR');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -11,6 +14,8 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
+    "password" TEXT NOT NULL DEFAULT '',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -72,11 +77,11 @@ CREATE TABLE "Tag" (
 );
 
 -- CreateTable
-CREATE TABLE "_PostToTag" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL,
+CREATE TABLE "TagsOnPosts" (
+    "postId" TEXT NOT NULL,
+    "tagId" TEXT NOT NULL,
 
-    CONSTRAINT "_PostToTag_AB_pkey" PRIMARY KEY ("A","B")
+    CONSTRAINT "TagsOnPosts_pkey" PRIMARY KEY ("postId","tagId")
 );
 
 -- CreateIndex
@@ -84,9 +89,6 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
-
--- CreateIndex
-CREATE INDEX "_PostToTag_B_index" ON "_PostToTag"("B");
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -110,7 +112,7 @@ ALTER TABLE "Reaction" ADD CONSTRAINT "Reaction_postId_fkey" FOREIGN KEY ("postI
 ALTER TABLE "Reaction" ADD CONSTRAINT "Reaction_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "Comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_PostToTag" ADD CONSTRAINT "_PostToTag_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "TagsOnPosts" ADD CONSTRAINT "TagsOnPosts_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_PostToTag" ADD CONSTRAINT "_PostToTag_B_fkey" FOREIGN KEY ("B") REFERENCES "Tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "TagsOnPosts" ADD CONSTRAINT "TagsOnPosts_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "Tag"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
