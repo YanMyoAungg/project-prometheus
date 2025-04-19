@@ -10,9 +10,20 @@ import { PrismaModule } from './common/prisma/prisma.module';
 import { UsersModule } from './modules/users/users.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { LoggerMiddleware } from './auth/test-middleware';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, UsersModule, PostsModule],
+  imports: [
+    PrismaModule,
+    UsersModule,
+    PostsModule,
+    AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env.dev',
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

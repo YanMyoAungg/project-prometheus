@@ -1,15 +1,13 @@
+//src/auth/dto/login.dto.ts
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-export class CreateUserDto {
-  @IsString()
-  @MinLength(5)
-  @IsNotEmpty()
-  name: string;
-
+export class LoginDto {
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
-  @MinLength(8)
+  @IsNotEmpty()
+  @MinLength(6)
   password: string;
 }

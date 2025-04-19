@@ -45,7 +45,7 @@ model User {
   posts     Post[]
   comments  Comment[]
   reactions Reaction[]
-  password  String     @default("")
+  password  String
 }
 
 model Post {
