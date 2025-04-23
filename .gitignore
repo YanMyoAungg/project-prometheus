@@ -11,4 +11,5 @@ dist/
 
 # Environment files
 .env
+.env.dev
 .env.local

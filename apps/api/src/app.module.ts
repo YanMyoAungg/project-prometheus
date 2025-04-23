@@ -24,6 +24,7 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.env.dev',
     }),
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })
