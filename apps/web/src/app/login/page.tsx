@@ -2,48 +2,53 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Alert,
   Button,
-  Center,
+  Container,
   Field,
   Input,
   InputGroup,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { LuMail } from "react-icons/lu";
-import { login } from "@/utils/auth";
+import { FieldError, login } from "@/utils/auth";
 import { PasswordInput } from "@/components/ui/password-input";
 import { getCookie } from "cookies-next";
 
 export default function LoginPage() {
   const router = useRouter();
-  const nameRef = useRef<string>(null);
+  // const nameRef = useRef<string>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<any | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
+    setErrors({}); // clear old
+
+    const email = emailRef.current?.value ?? "";
+    const password = passwordRef.current?.value ?? "";
 
     try {
-      const emailInput = emailRef.current?.value;
-      const passwordIinput = passwordRef.current?.value;
-      if (emailInput && passwordIinput) {
-        await login(emailInput, passwordIinput);
-        router.push("/");
-      } else {
-        console.error("Email or password is missing");
-      }
-    } catch (err: string) {
-      console.log(err);
+      await login(email, password);
+      router.push("/");
+    } catch (errs: unknown) {
+      console.log(errs);
 
-      setError(err.message || "An unexpected error occurred");
-    } finally {
-      setIsSubmitting(false);
+      // this is AI generated and need to fix for simpler error handling
+      if (Array.isArray(errs)) {
+        const fieldMap: Record<string, string> = {};
+        (errs as FieldError[]).forEach((err) => {
+          // grab the first validation message in the map:
+          const firstKey = Object.keys(err.message)[0];
+          const firstError = err.message[firstKey];
+          fieldMap[err.field] = firstError;
+        });
+        setErrors(fieldMap);
+      } else {
+        // fallback
+        setErrors({ general: "Something went wrong" });
+      }
     }
   };
 
@@ -53,17 +58,14 @@ export default function LoginPage() {
     if (accessToken) {
       router.push("/");
     }
-  }, [error, router]);
+    console.log(errors, "fuck u");
+  }, [errors, router]);
   return (
     <>
-      <Center mb="80" mt="20">
+      <Container>
         <form onSubmit={handleSubmit}>
-          {error && error !== null && (
-            <Text style={{ color: "red" }}>{error}</Text>
-          )}
-
-          <Stack gap="4" align="flex-end">
-            <Field.Root>
+          <Stack my={20} gap="4" align="flex-end" maxW="sm" mx={"auto"}>
+            <Field.Root invalid={!!errors}>
               <Field.Label>Email</Field.Label>
               <InputGroup startElement={<LuMail />}>
                 <Input
@@ -72,21 +74,20 @@ export default function LoginPage() {
                   _invalid={{ color: "red" }}
                 />
               </InputGroup>
-              {/* <Text>{error}</Text> */}
+              {/* {error && <Field.ErrorText>{error}</Field.ErrorText>} */}
             </Field.Root>
 
-            <Field.Root>
+            <Field.Root invalid={!!errors}>
               <Field.Label>Password</Field.Label>
               <PasswordInput ref={passwordRef} placeholder="Password" />
-              {/* <Text>{error}</Text> */}
+              {/* {error && <Field.ErrorText>{error}</Field.ErrorText>} */}
             </Field.Root>
-
             <Button type="submit" loading={isSubmitting}>
               Login
             </Button>
           </Stack>
         </form>
-      </Center>
+      </Container>
     </>
   );
 }

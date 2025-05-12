@@ -4,7 +4,7 @@ import Provider from "@/components/Provider";
 import TopNav from "@/components/topNav";
 import BottomNav from "@/components/bottomNav";
 import { Metadata } from "next";
-import { ProtectedClient } from "@/hooks/useAuthenticate";
+import { ClientProvider } from "@/hooks/useMounted";
 
 export const metadata: Metadata = {
   title: "Prometheus",
@@ -34,14 +34,14 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body>
-        <Provider>
-          <ProtectedClient>
+        <ClientProvider>
+          <Provider>
             <TopNav />
 
             {children}
             <BottomNav />
-          </ProtectedClient>
-        </Provider>
+          </Provider>
+        </ClientProvider>
       </body>
     </html>
   );

@@ -1,17 +1,20 @@
 "use client";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function ProtectedClient({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  useEffect(() => {
-    const accessToken = getCookie("accessToken");
-    console.log(accessToken);
+  const [isLoading, setIsLoading] = useState(false);
+  const accessToken = getCookie("accessToken");
 
+  useEffect(() => {
     if (!accessToken) {
+      setIsLoading(true);
       router.replace("/login");
     }
-  }, [router]);
-  return <>{children}</>;
+    setIsLoading(false);
+  }, [accessToken, router]);
+
+  return <>{!isLoading && children}</>;
 }

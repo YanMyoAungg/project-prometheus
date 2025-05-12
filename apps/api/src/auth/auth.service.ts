@@ -22,12 +22,20 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email: email } });
 
     if (!user) {
-      throw new NotFoundException(`No user found for email: ${email}`);
+      throw new NotFoundException({
+        field: 'email',
+        errorCode: 'USER_NOT_FOUND',
+        message: `No account found for email: ${email}`,
+      });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException({
+        field: 'password',
+        errorCode: 'INVALID_PASSWORD',
+        message: 'The password you entered is incorrect.',
+      });
     }
 
     // Step 3: Generate a JWT containing the user's ID and return it
