@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
@@ -9,7 +9,11 @@ export class AuthController {
 
   @Post('login')
   login(@Body() { email, password }: LoginDto) {
-    return this.authService.login(email, password);
+    const user = this.authService.login(email, password);
+    if (!user) {
+      throw new HttpException('Invalid credentials', 401);
+    }
+    return user;
   }
 
   @Post('signup')

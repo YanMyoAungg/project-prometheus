@@ -1,8 +1,9 @@
+import { error } from "console";
 import { deleteCookie, setCookie } from "cookies-next";
 
 export interface FieldError {
   field: string;
-  message: any;
+  message: string;
 }
 export async function login(email: string, password: string) {
   const res = await fetch("http://localhost:3000/auth/login", {
@@ -12,9 +13,14 @@ export async function login(email: string, password: string) {
   });
 
   if (!res.ok) {
-    // expect { statusCode, errors: FieldError[] }
-    const { errors }: { errors: FieldError[] } = await res.json();
-    throw errors;
+    // this will match either your manual or DTO errors
+    // const errors = await res.json();
+    // console.log(errors);
+
+    const { field, message } = await res.json();
+    // console.log({ field, message });
+
+    throw { field, message };
   }
 
   const { accessToken } = await res.json();

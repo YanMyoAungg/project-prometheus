@@ -24,7 +24,6 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException({
         field: 'email',
-        errorCode: 'USER_NOT_FOUND',
         message: `No account found for email: ${email}`,
       });
     }
@@ -33,12 +32,10 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException({
         field: 'password',
-        errorCode: 'INVALID_PASSWORD',
         message: 'The password you entered is incorrect.',
       });
     }
 
-    // Step 3: Generate a JWT containing the user's ID and return it
     return {
       accessToken: this.jwtService.sign({ userId: user.id }),
     };
@@ -48,5 +45,12 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(data.password!, roundOfHashing);
     data.password = hashedPassword;
     return await this.prisma.user.create({ data });
+  }
+  async validateUser(userId: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 }

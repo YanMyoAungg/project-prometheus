@@ -19,7 +19,7 @@ export default function LoginPage() {
   // const nameRef = useRef<string>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [errors, setErrors] = useState<any | null>(null);
+  const [errors, setErrors] = useState<FieldError | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,23 +32,10 @@ export default function LoginPage() {
     try {
       await login(email, password);
       router.push("/");
-    } catch (errs: unknown) {
-      console.log(errs);
-
+    } catch (errs: FieldError | any) {
       // this is AI generated and need to fix for simpler error handling
-      if (Array.isArray(errs)) {
-        const fieldMap: Record<string, string> = {};
-        (errs as FieldError[]).forEach((err) => {
-          // grab the first validation message in the map:
-          const firstKey = Object.keys(err.message)[0];
-          const firstError = err.message[firstKey];
-          fieldMap[err.field] = firstError;
-        });
-        setErrors(fieldMap);
-      } else {
-        // fallback
-        setErrors({ general: "Something went wrong" });
-      }
+      setErrors(errs);
+      console.log(errors);
     }
   };
 
@@ -58,14 +45,13 @@ export default function LoginPage() {
     if (accessToken) {
       router.push("/");
     }
-    console.log(errors, "fuck u");
   }, [errors, router]);
   return (
     <>
       <Container>
         <form onSubmit={handleSubmit}>
           <Stack my={20} gap="4" align="flex-end" maxW="sm" mx={"auto"}>
-            <Field.Root invalid={!!errors}>
+            <Field.Root invalid={errors?.field === "email"}>
               <Field.Label>Email</Field.Label>
               <InputGroup startElement={<LuMail />}>
                 <Input
@@ -74,13 +60,17 @@ export default function LoginPage() {
                   _invalid={{ color: "red" }}
                 />
               </InputGroup>
-              {/* {error && <Field.ErrorText>{error}</Field.ErrorText>} */}
+              {errors?.field === "email" && (
+                <Field.ErrorText>{errors.message}</Field.ErrorText>
+              )}
             </Field.Root>
 
-            <Field.Root invalid={!!errors}>
+            <Field.Root invalid={errors?.field === "password"}>
               <Field.Label>Password</Field.Label>
               <PasswordInput ref={passwordRef} placeholder="Password" />
-              {/* {error && <Field.ErrorText>{error}</Field.ErrorText>} */}
+              {errors?.field === "password" && (
+                <Field.ErrorText>{errors.message}</Field.ErrorText>
+              )}{" "}
             </Field.Root>
             <Button type="submit" loading={isSubmitting}>
               Login
