@@ -24,8 +24,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({}); // clear old
-
+    setIsSubmitting(true);
     const email = emailRef.current?.value ?? "";
     const password = passwordRef.current?.value ?? "";
 
@@ -33,9 +32,10 @@ export default function LoginPage() {
       await login(email, password);
       router.push("/");
     } catch (errs: FieldError | any) {
-      // this is AI generated and need to fix for simpler error handling
       setErrors(errs);
       console.log(errors);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
