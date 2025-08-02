@@ -4,6 +4,7 @@ import Provider from "@/components/Provider";
 import TopNav from "@/components/topNav";
 import BottomNav from "@/components/bottomNav";
 import { Metadata } from "next";
+import { ProtectedClient } from "@/hooks/useAuthenticate";
 
 export const metadata: Metadata = {
   title: "Prometheus",
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-const geistSans = Geist({
+export const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -34,10 +35,12 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body>
         <Provider>
-          <TopNav />
+          <ProtectedClient>
+            <TopNav />
 
-          {children}
-          <BottomNav />
+            {children}
+            <BottomNav />
+          </ProtectedClient>
         </Provider>
       </body>
     </html>
