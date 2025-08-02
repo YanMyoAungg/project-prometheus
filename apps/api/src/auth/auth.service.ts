@@ -9,6 +9,7 @@ import { AuthEntity } from './auth.entity';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Prisma, User } from '@prisma/client';
+import { AuthDto } from './dto/auth.dto';
 const roundOfHashing = 10;
 
 @Injectable()
@@ -19,6 +20,8 @@ export class AuthService {
   ) {}
 
   async login(email: string, password: string): Promise<AuthEntity> {
+    console.log('login is here');
+
     const user = await this.prisma.user.findUnique({ where: { email: email } });
 
     if (!user) {
@@ -41,13 +44,14 @@ export class AuthService {
     };
   }
   async signUp(data: Prisma.UserCreateInput): Promise<User> {
-    console.log('Signup');
     const hashedPassword = await bcrypt.hash(data.password!, roundOfHashing);
     data.password = hashedPassword;
     return await this.prisma.user.create({ data });
   }
-  async validateUser(userId: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+  async validateUser({ email, password }: AuthDto): Promise<User> {
+    console.log('validateUser is here');
+
+    const user = await this.prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       throw new NotFoundException('User not found');
     }

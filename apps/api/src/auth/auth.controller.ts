@@ -1,14 +1,22 @@
-import { Body, Controller, HttpException, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpException,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { AuthDto, SignupDto } from './dto/auth.dto';
+// import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { LocalAuthGuard } from './guards/local.auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  login(@Body() { email, password }: LoginDto) {
+  @UseGuards(LocalAuthGuard)
+  login(@Body() { email, password }: AuthDto) {
     const user = this.authService.login(email, password);
     if (!user) {
       throw new HttpException('Invalid credentials', 401);
@@ -17,7 +25,7 @@ export class AuthController {
   }
 
   @Post('signup')
-  signUp(@Body() createUserDto: CreateUserDto) {
+  signUp(@Body() createUserDto: SignupDto) {
     return this.authService.signUp(createUserDto);
   }
 }

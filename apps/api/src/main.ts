@@ -19,7 +19,7 @@ async function bootstrap() {
       whitelist: true, // strip unknown props
       forbidNonWhitelisted: true, // throw if unknown props
       transform: true, // auto‐convert payloads
-      errorHttpStatusCode: 422, // you decide status code
+      // errorHttpStatusCode: 422, // you decide status code
       // exceptionFactory: (errors) =>
       //   new BadRequestException(
       //     errors.map((err) => ({
@@ -27,16 +27,16 @@ async function bootstrap() {
       //       message: err.constraints,
       //     })),
       //   ),
-      exceptionFactory: (validationErrors) => {
-        const first = validationErrors[0];
-        const constraints = first.constraints || {};
-        // take the first constraint message:
-        const message = Object.values(constraints)[0];
-        return new BadRequestException({
-          field: first.property,
-          message,
-        });
-      },
+      // exceptionFactory: (validationErrors) => {
+      //   const first = validationErrors[0];
+      //   const constraints = first.constraints || {};
+      //   // take the first constraint message:
+      //   const message = Object.values(constraints)[0];
+      //   return new BadRequestException({
+      //     field: first.property,
+      //     message,
+      //   });
+      // },
     }),
   );
   await app.listen(3000);

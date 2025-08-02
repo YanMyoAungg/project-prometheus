@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../auth.service';
+import { AuthDto } from '../dto/auth.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -17,8 +18,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: { userId: string }) {
-    const user = this.authService.validateUser(payload.userId);
+  validate({ email, password }: AuthDto) {
+    console.log('i was king');
+
+    const user = this.authService.validateUser({ email, password });
+
     return user;
   }
 }
